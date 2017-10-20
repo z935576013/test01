@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration  debug="false">
+
+	<property name="LOG_PATH" value="temp" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>[%-5level]|%date|%thread|%logger|%X{invokeNo}|%X{ip}|%X{user}|%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="merak"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<prudent>true</prudent>
+		<file>${LOG_PATH}\merak</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}\merak.%d{yyyyMMdd}.%i
+			</fileNamePattern>
+			<maxHistory>60</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>[%-5level]|%date|%thread|%logger|%X{invokeNo}|%X{ip}|%X{user}|%msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="accesslog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<prudent>true</prudent>
+		<file>${LOG_PATH}\accesslog</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}\accesslog.%d{yyyyMMdd}.%i
+			</fileNamePattern>
+			<maxHistory>60</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>[%-5level]|%date|%thread|%logger|%X{invokeNo}|%X{ip}|%X{user}|%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<springProfile name="DEV">
+		<logger name="com.merak.prototype" level="DEBUG" additivity="false">
+			<appender-ref ref="STDOUT" />
+		</logger>
+		<logger name="accesslog" level="INFO" additivity="false">
+			<appender-ref ref="STDOUT" />
+		</logger>
+		<root level="ERROR">
+			<appender-ref ref="STDOUT" />
+		</root>
+	</springProfile>
+
+	<springProfile name="SIT">
+		<logger name="com.merak.prototype" level="DEBUG" additivity="false">
+			<appender-ref ref="merak" />
+		</logger>
+		<logger name="accesslog" level="INFO" additivity="false">
+			<appender-ref ref="accesslog" />
+		</logger>
+		<root level="ERROR">
+			<appender-ref ref="merak" />
+		</root>
+	</springProfile>
+
+</configuration>

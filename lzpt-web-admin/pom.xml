@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.merak.lzpt</groupId>
+		<artifactId>lzpt-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../lzpt-parent/pom.xml</relativePath>
+	</parent>
+	<artifactId>lzpt-web-admin</artifactId>
+	<name>lzpt-web-admin</name>
+	<packaging>jar</packaging>
+	<description>lzpt-web-admin</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.merak.lzpt</groupId>
+			<artifactId>lzpt-service-intf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.merak.lzpt</groupId>
+			<artifactId>lzpt-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.merak.lzpt</groupId>
+			<artifactId>lzpt-service</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.5.RELEASE</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

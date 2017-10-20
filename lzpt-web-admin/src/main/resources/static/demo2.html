@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>sign-in</title>
+<link rel="shortcut icon" type="image/png" href="/favicon.png">
+ 
+</head>
+<body>
+
+<div class="header"></div>
+<div class="body">
+	<div class="form">
+			<div class="form-group">
+				<label for="account" class="sr-only">account</label>
+				<input id="account" name="account" type="text" autofocus="autofocus" placeholder="帐号" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="password" class="sr-only">password</label>
+				<input id="password" name="password" type="password" autocomplete = "off"  placeholder="登录密码" class="form-control">
+			</div>
+			<div class="form-group">
+				<input id="loginVerificationCode" class="form-contro" type="text" placeholder="图形验证码" name="verificationCode">
+				<img id="loginImgCode" src="/imgCode/adminLoginImageCode.do" style="width:85px;height:34px;"></img>
+			</div>
+			<div class="form-group" id="authCodeDiv">
+				<input id="reqAuthCode" class="form-contro" type="text" placeholder="请求验证码" name="reqAuthCode" readonly>
+				<input id="authCode" class="form-contro" type="text" placeholder="身份验证码" name="authCode">
+				<input id="remark" class="form-contro" type="text" placeholder="留言" name="authCode"><button class="" onclick="getAuthCode();">获取请求验证码</button>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary btn-block" onclick="checkLogin();">登录</button>
+			</div>
+	</div>
+</div>
+<div class="footer">
+	<span>&copy; 2014 merak All rights reserved.</span>
+</div>
+
+
+<body>
+</html>
