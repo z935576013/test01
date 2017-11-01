@@ -16,6 +16,7 @@ public class SessionUtil {
 
 	static final long EXPIRATIONTIME = 3600 * 24 * 7;
 	static final String SECRET = "MERAK"; // JWT密码
+	static final String TOKEN_PREFIX = "Bearer"; // Token前缀
 	static final String COOKIE_NAME = "JWT";// 存放Token的cookie Key
 
 	/**
@@ -44,7 +45,7 @@ public class SessionUtil {
 						// 验签
 						.setSigningKey(SECRET)
 						// 去掉 Bearer
-						.parseClaimsJws(token).getBody();
+						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 
 				String id = claims.getSubject();
 				UserInfo userInfo = new UserInfo();
