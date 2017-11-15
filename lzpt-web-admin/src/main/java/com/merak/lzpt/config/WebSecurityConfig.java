@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		JwtRequestHeaderAuthenticationFilter testFilter = new JwtRequestHeaderAuthenticationFilter();
+		JwtPreAuthenticationFilter testFilter = new JwtPreAuthenticationFilter();
 		List<AuthenticationProvider> providers = new ArrayList<AuthenticationProvider>();
 		providers.add(jwtAuthenticationProvider);
 		ProviderManager authenticationManager = new ProviderManager(providers);
