@@ -55,7 +55,6 @@ public class AccessLogFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		String path = request.getRequestURI();
-		String sessionId = request.getSession(true).getId();
 		String userAgent = request.getHeader("User-Agent");
 		Long userId = null;
 		try {
@@ -70,7 +69,6 @@ public class AccessLogFilter extends OncePerRequestFilter {
 		if (userId != null) {
 			MDC.put(STR_USER, userId.toString());
 		}
-		MDC.put(STR_SESSION_ID, sessionId);
 
 		// 调用流水号
 		MDC.put(STR_INVOKENO, UUID.randomUUID().toString().replace(MIDDLE_LINE, BLANK));
@@ -88,8 +86,8 @@ public class AccessLogFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			executionTime = System.currentTimeMillis() - startTime;
 		} finally {
-			message.append(userAgent).append(SPACE).append(sessionId).append(SPACE).append(path).append(SPACE)
-					.append(JSON.toJSONString(paramMap)).append(SPACE).append(executionTime);
+			message.append(userAgent).append(SPACE).append(path).append(SPACE).append(JSON.toJSONString(paramMap))
+					.append(SPACE).append(executionTime);
 
 			// 记录日志
 			LOG.info(message.toString());

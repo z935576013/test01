@@ -38,26 +38,34 @@ public class SessionUtil {
 	 */
 	public static UserInfo getUserInfo(HttpServletRequest request) {
 		try {
-			String token = CookieUtils.getCookie(request, COOKIE_NAME);
-			if (token != null) {
-				// 解析 Token
-				Claims claims = Jwts.parser()
-						// 验签
-						.setSigningKey(SECRET)
-						// 去掉 Bearer
-						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
-
-				String id = claims.getSubject();
-				UserInfo userInfo = new UserInfo();
-				userInfo.setId(Long.valueOf(id));
-				userInfo.setMobile(claims.get("mobile", String.class));
-				userInfo.setName(claims.get("name", String.class));
-				return userInfo;
-			} else {
-				return null;
-			}
+			String token = getTokenFromRequest(request);
+			return getUserInfoFromToken(token);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getTokenFromRequest(HttpServletRequest request) {
+		return CookieUtils.getCookie(request, COOKIE_NAME);
+	}
+
+	public static UserInfo getUserInfoFromToken(String token) {
+		if (token != null) {
+			// 解析 Token
+			Claims claims = Jwts.parser()
+					// 验签
+					.setSigningKey(SECRET)
+					// 去掉 Bearer
+					.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+
+			String id = claims.getSubject();
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(Long.valueOf(id));
+			userInfo.setMobile(claims.get("mobile", String.class));
+			userInfo.setName(claims.get("name", String.class));
+			return userInfo;
+		} else {
 			return null;
 		}
 	}
