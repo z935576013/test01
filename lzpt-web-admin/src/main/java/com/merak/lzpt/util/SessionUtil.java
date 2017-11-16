@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -37,11 +39,15 @@ public class SessionUtil {
 	 * @return
 	 */
 	public static AdminInfo getAdminInfo(HttpServletRequest request) {
-		try {
-			String token = getTokenFromRequest(request);
-			return getAdminInfoFromToken(token);
-		} catch (Exception e) {
-			e.printStackTrace();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null) {
+			Object admin = authentication.getPrincipal();
+			if (admin == null) {
+				return null;
+			} else {
+				return (AdminInfo) admin;
+			}
+		} else {
 			return null;
 		}
 	}
@@ -53,19 +59,23 @@ public class SessionUtil {
 	public static AdminInfo getAdminInfoFromToken(String token) {
 		if (token != null) {
 			// 解析 Token
-			Claims claims = Jwts.parser()
-					// 验签
-					.setSigningKey(SECRET)
-					// 去掉 Bearer
-					.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+			try {
+				Claims claims = Jwts.parser()
+						// 验签
+						.setSigningKey(SECRET)
+						// 去掉 Bearer
+						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 
-			String id = claims.getSubject();
-			AdminInfo adminInfo = new AdminInfo();
-			adminInfo.setId(Long.valueOf(id));
-			adminInfo.setMobile(claims.get("mobile", String.class));
-			adminInfo.setName(claims.get("name", String.class));
-			adminInfo.setAuthoritys(claims.get("authoritys", String.class));
-			return adminInfo;
+				String id = claims.getSubject();
+				AdminInfo adminInfo = new AdminInfo();
+				adminInfo.setId(Long.valueOf(id));
+				adminInfo.setMobile(claims.get("mobile", String.class));
+				adminInfo.setName(claims.get("name", String.class));
+				adminInfo.setAuthoritys(claims.get("authoritys", String.class));
+				return adminInfo;
+			} catch (Exception e) {
+				return null;
+			}
 		} else {
 			return null;
 		}

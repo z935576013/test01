@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import com.merak.lzpt.util.AdminInfo;
 import com.merak.lzpt.util.SessionUtil;
 
-public class JwtAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class TokenAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

@@ -16,7 +16,7 @@ import com.merak.lzpt.util.AdminInfo;
 import com.merak.lzpt.util.SessionUtil;
 
 @Service
-public class JwtAuthenticationProvider implements AuthenticationProvider {
+public class TokenAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication arg0) {

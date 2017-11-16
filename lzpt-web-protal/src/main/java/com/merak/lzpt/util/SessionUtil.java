@@ -52,19 +52,23 @@ public class SessionUtil {
 
 	public static UserInfo getUserInfoFromToken(String token) {
 		if (token != null) {
-			// 解析 Token
-			Claims claims = Jwts.parser()
-					// 验签
-					.setSigningKey(SECRET)
-					// 去掉 Bearer
-					.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+			try {
+				// 解析 Token
+				Claims claims = Jwts.parser()
+						// 验签
+						.setSigningKey(SECRET)
+						// 去掉 Bearer
+						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 
-			String id = claims.getSubject();
-			UserInfo userInfo = new UserInfo();
-			userInfo.setId(Long.valueOf(id));
-			userInfo.setMobile(claims.get("mobile", String.class));
-			userInfo.setName(claims.get("name", String.class));
-			return userInfo;
+				String id = claims.getSubject();
+				UserInfo userInfo = new UserInfo();
+				userInfo.setId(Long.valueOf(id));
+				userInfo.setMobile(claims.get("mobile", String.class));
+				userInfo.setName(claims.get("name", String.class));
+				return userInfo;
+			} catch (Exception e) {
+				return null;
+			}
 		} else {
 			return null;
 		}

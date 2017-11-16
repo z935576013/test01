@@ -7,7 +7,6 @@
 package com.merak.lzpt.util;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 实体类用户

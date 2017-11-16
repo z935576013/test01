@@ -17,6 +17,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 
 import com.merak.lzpt.constants.AuthorityConstants;
+import com.merak.lzpt.filter.AccessLogFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,22 +27,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private AuthenticationProvider userAuthenticationProvider;
 
 	@Resource
-	private AuthenticationProvider jwtAuthenticationProvider;
+	private AuthenticationProvider tokenAuthenticationProvider;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		JwtPreAuthenticationFilter testFilter = new JwtPreAuthenticationFilter();
+		TokenPreAuthenticationFilter tokenFilter = new TokenPreAuthenticationFilter();
 		List<AuthenticationProvider> providers = new ArrayList<AuthenticationProvider>();
-		providers.add(jwtAuthenticationProvider);
+		providers.add(tokenAuthenticationProvider);
 		ProviderManager authenticationManager = new ProviderManager(providers);
-		testFilter.setAuthenticationManager(authenticationManager);
-		http.addFilterAt(testFilter, AbstractPreAuthenticatedProcessingFilter.class);
+		tokenFilter.setAuthenticationManager(authenticationManager);
+		http.addFilterAt(tokenFilter, AbstractPreAuthenticatedProcessingFilter.class);
 
+		http.addFilterBefore(new AccessLogFilter(), AbstractPreAuthenticatedProcessingFilter.class);
+		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.csrf().disable();
 		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 		http.authenticationProvider(userAuthenticationProvider);
-		http.formLogin().loginPage("/login/login").successHandler(new JwtAuthenticationSuccessHandler()).permitAll()
+		http.formLogin().loginPage("/login/login").successHandler(new TokenAuthenticationSuccessHandler()).permitAll()
 				.and().logout().permitAll();
 
 		setAuthorizationConf(http);

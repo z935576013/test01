@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.alibaba.fastjson.JSON;
 import com.merak.lzpt.util.SessionUtil;
 
-@WebFilter(filterName = "accessLogFilter", urlPatterns = "/*")
 public class AccessLogFilter extends OncePerRequestFilter {
 
 	private static final Logger LOG = LoggerFactory.getLogger("accesslog");
@@ -28,8 +26,6 @@ public class AccessLogFilter extends OncePerRequestFilter {
 	private static final String STR_IP = "ip";
 
 	private static final String STR_USER = "user";
-
-	private static final String STR_SESSION_ID = "sessionId";
 
 	private static final String STR_INVOKENO = "invokeNo";
 
@@ -75,7 +71,7 @@ public class AccessLogFilter extends OncePerRequestFilter {
 
 		// 参数
 		Map<String, String[]> paramMap = request.getParameterMap();
-
+		
 		// 计算action method执行方法
 		long startTime = System.currentTimeMillis();
 		long executionTime = 0L;
@@ -94,7 +90,6 @@ public class AccessLogFilter extends OncePerRequestFilter {
 			// 清除MDC里面的历史信息
 			MDC.remove(STR_IP);
 			MDC.remove(STR_USER);
-			MDC.remove(STR_SESSION_ID);
 			MDC.remove(STR_INVOKENO);
 		}
 	}
