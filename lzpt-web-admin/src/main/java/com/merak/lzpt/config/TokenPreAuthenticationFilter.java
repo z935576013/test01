@@ -7,9 +7,7 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import com.merak.lzpt.util.SessionUtil;
 
 public class TokenPreAuthenticationFilter extends AbstractPreAuthenticatedProcessingFilter {
-
-	static final String COOKIE_NAME = "USER_TOKEN";// 存放Token的cookie Key
-
+	
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
 		String token = SessionUtil.getTokenFromRequest(request);
 		return token;
