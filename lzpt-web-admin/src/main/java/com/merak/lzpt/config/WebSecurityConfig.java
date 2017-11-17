@@ -11,7 +11,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
@@ -40,13 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.addFilterBefore(new AccessLogFilter(), AbstractPreAuthenticatedProcessingFilter.class);
 		
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.setSharedObject(RequestCache.class, new TokenRequestCache());
+		
 		http.csrf().disable();
 		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 		http.authenticationProvider(userAuthenticationProvider);
 		http.formLogin().loginPage("/login/login").successHandler(new TokenAuthenticationSuccessHandler()).permitAll()
 				.and().logout().permitAll();
-
+		
 		setAuthorizationConf(http);
 
 	}
